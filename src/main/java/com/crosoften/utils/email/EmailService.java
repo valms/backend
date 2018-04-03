@@ -1,6 +1,7 @@
 package com.crosoften.utils.email;
 
-import com.google.gson.Gson;
+import com.crosoften.utils.json.JsonHandler;
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,14 +11,18 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 
+/**
+ * @author Valmar Júnior
+ * @version 1.0.1
+ * @since 1.0.0
+ */
 @Service
-public class Email {
+public class EmailService {
 
     private JavaMailSender javaMailSender;
 
-
     @Autowired
-    public Email(JavaMailSender javaMailSender) {
+    public EmailService(JavaMailSender javaMailSender) {
         this.javaMailSender = javaMailSender;
     }
 
@@ -29,7 +34,7 @@ public class Email {
      * @param subject   Email subject
      * @return Message of success or error and a HTTP Status
      */
-    public ResponseEntity<String> prepareAndSend(String recipient, String message, String subject) {
+    public ResponseEntity<JsonObject> prepareAndSend(String recipient, String message, String subject) {
 
         MimeMessagePreparator messagePreparator = mimeMessage -> {
             MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage);
@@ -38,24 +43,17 @@ public class Email {
             messageHelper.setSubject(subject);
             messageHelper.setText(message);
         };
-
+        //  TODO: Response Fix
         try {
 
-
             javaMailSender.send(messagePreparator);
+            return ResponseEntity.ok(JsonHandler.buildReturnJson("Email enviado com Sucesso!"));
 
-
-            return ResponseEntity.ok(buildReturnJson("Email enviado com Sucesso!"));
         } catch (MailException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(buildReturnJson("Erro ao enviar o email!"));
+
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(JsonHandler.buildReturnJson("Erro ao enviar o email!"));
+
         }
     }
 
-
-    public String buildReturnJson(String message) {
-        Gson gson = new Gson();
-        String json = gson.toJson(message);
-        System.out.println(json);
-        return json;
-    }
 }
