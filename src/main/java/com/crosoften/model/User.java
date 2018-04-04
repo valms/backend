@@ -1,8 +1,5 @@
 package com.crosoften.model;
 
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.br.CPF;
 
@@ -12,8 +9,6 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "users")
-//@JsonIgnoreProperties(value = {"password"}, allowGetters = true)
-@JsonIgnoreProperties(allowGetters = true)
 public class User extends Auditable<String> implements Serializable {
 
     @Id
