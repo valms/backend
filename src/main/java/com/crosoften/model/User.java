@@ -1,35 +1,44 @@
 package com.crosoften.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity
 @Table(name = "users")
-@EntityListeners(AuditingEntityListener.class)
-@JsonIgnoreProperties(value = {"created_at", "updated_at", "passwd"},
-        allowGetters = true)
-public class User implements Serializable {
+//@JsonIgnoreProperties(value = {"password"}, allowGetters = true)
+@JsonIgnoreProperties(allowGetters = true)
+public class User extends Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @NotNull
+    @NotBlank
     private String name;
 
-    @NotNull
+    @NotBlank
+    @CPF
     private String cpf;
 
-    @NotNull
+    @NotBlank
     private String rg;
+
+    @NotBlank
+    private String email;
+
+    @NotBlank
+    private String phone;
+
+    @NotBlank
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    private String password;
 
     private String crea;
 
@@ -39,29 +48,9 @@ public class User implements Serializable {
 
     private String ccm;
 
-    @NotNull
-    private String email;
-
-    @NotNull
-    private String phone;
-
-    @NotNull
-    private String passwd;
-
     @Column(name = "is_pro")
-    private boolean isPro;
+    private boolean professional;
 
-    @Column(name = "created_at", updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    @NotNull
-    private Date createdAt;
-
-    @Column(name = "updated_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    @NotNull
-    private Date updatedAt;
 
     public int getId() {
         return id;
@@ -143,35 +132,19 @@ public class User implements Serializable {
         this.phone = phone;
     }
 
-    public String getPasswd() {
-        return passwd;
+    public String getPassword() {
+        return password;
     }
 
-    public void setPasswd(String passwd) {
-        this.passwd = passwd;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    public boolean isPro() {
-        return isPro;
+    public boolean isprofessional() {
+        return this.professional;
     }
 
-    public void setPro(boolean pro) {
-        isPro = pro;
-    }
-
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setProfessional(boolean professional) {
+        this.professional = professional;
     }
 }

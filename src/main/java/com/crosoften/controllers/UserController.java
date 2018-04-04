@@ -3,9 +3,7 @@ package com.crosoften.controllers;
 import com.crosoften.model.User;
 import com.crosoften.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -16,14 +14,18 @@ public class UserController {
     private final UserRepository userRepository;
 
     @Autowired
-    public UserController(UserRepository userRepository) {
+    private UserController(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @GetMapping("/users")
     public List<User> getAllNotes() {
-        return (List<User>) this.userRepository.findAll();
+        return this.userRepository.findAll();
     }
 
+    @PostMapping("/saveUser")
+    public User createUser(@RequestBody User request) {
+        return this.userRepository.save(request);
+    }
 
 }

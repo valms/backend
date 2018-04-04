@@ -5,12 +5,13 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.util.Arrays;
 
 @SpringBootApplication
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "auditorAware")
 public class Main {
 
     public static void main(String[] args) {
@@ -37,6 +38,11 @@ public class Main {
                 System.out.println(beanName);
             }
         };
+    }
+
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        return new AuditorAwareImpl();
     }
 
 }
