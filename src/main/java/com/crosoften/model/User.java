@@ -1,19 +1,19 @@
 package com.crosoften.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.validator.constraints.br.CPF;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.io.Serializable;
 
-@Entity
-@Table(name = "users")
+@SuppressWarnings("unused")
+@Entity(name = "User")
+@Table(name = "user")
 public class User extends Auditable<String> implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private Long id;
 
     @NotBlank
     private String name;
@@ -31,10 +31,6 @@ public class User extends Auditable<String> implements Serializable {
     @NotBlank
     private String phone;
 
-    @NotBlank
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    private String password;
-
     private String crea;
 
     private String creci;
@@ -43,15 +39,14 @@ public class User extends Auditable<String> implements Serializable {
 
     private String ccm;
 
-    @Column(name = "is_pro")
-    private boolean professional;
+    @ManyToOne
+    private Account account;
 
-
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -77,6 +72,22 @@ public class User extends Auditable<String> implements Serializable {
 
     public void setRg(String rg) {
         this.rg = rg;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public String getCrea() {
@@ -111,35 +122,11 @@ public class User extends Auditable<String> implements Serializable {
         this.ccm = ccm;
     }
 
-    public String getEmail() {
-        return email;
+    public void setAccount(Account account) {
+        this.account = account;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public boolean isprofessional() {
-        return this.professional;
-    }
-
-    public void setProfessional(boolean professional) {
-        this.professional = professional;
+    public Account getAccount() {
+        return account;
     }
 }
